@@ -59,7 +59,7 @@ func saveRequestToLog(w http.ResponseWriter, r *http.Request) {
 
 	file.WriteString(t.Format("2006-01-02 15:04:06"))
 
-	file.WriteString("  " + r.RemoteAddr)
+	file.WriteString(" ip:" + r.RemoteAddr)
 	file.WriteString("\n")
 	file.Close()
 }

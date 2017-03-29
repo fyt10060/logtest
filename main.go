@@ -66,9 +66,20 @@ func saveRequestToLog(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	//	fmt.Println("Hello World!")
-	os.Create("requestLog.txt")
+	createFile()
 	beego.Router("/:func", &mainController{})
 	beego.Run()
+}
+
+func createFile() {
+	fl, err := os.Create(fileName)
+	if err != nil {
+		return
+	}
+	defer fl.Close()
+	fl.WriteString("file create time: ")
+	fl.WriteString(time.Now().Format("2006-01-02 15:04:05"))
+	fl.WriteString("\n")
 }
 
 type mainController struct {

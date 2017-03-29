@@ -1,9 +1,6 @@
 FROM golang
-RUN mkdir /app
-ADD logtest /app/logtest
-ADD conf /app/conf
-WORKDIR /app
+RUN go get github.com/astaxie/beego && go get github.com/beego/bee
+
 EXPOSE 9090
-ENTRYPOINT /app/logtest
 
 CMD ["bee", "run"]

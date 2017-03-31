@@ -71,6 +71,8 @@ func (c *mainController) Get() {
 		getLog(w, r)
 	case "push":
 		break
+	case "api_version":
+		go getApiAddress(w)
 	default:
 		httpNotFound(w, r)
 		go saveRequestToLog(w, r)

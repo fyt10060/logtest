@@ -22,12 +22,12 @@ type Message struct {
 	FromUser   string      `xml:"FromUserName"`
 	CreateTime int64       `xml:"CreateTime"`
 	MsgType    MessageType `xml:"MsgType"`
-	MsgId      string      `xml:"-"`
+	MsgId      string      `xml:"MsgId"`
 }
 
 type TextMessage struct {
 	Message
-	Content string   `xml:"Content"`
+	Content string   `xml:""`
 	XMLName xml.Name `xml:"xml"`
 }
 
@@ -42,6 +42,7 @@ func GetMessageDetail(data []byte) interface{} {
 		result := ParseResult(ErrNoMsgFound, nil)
 		return result
 	}
+	var content string
 	switch msg.MsgType {
 	case MTText:
 		var txtMsg TextMessage
@@ -51,10 +52,24 @@ func GetMessageDetail(data []byte) interface{} {
 			return result
 		}
 		return txtMsg
+	case MTImg:
+		content = "这是一条图片消息"
+	case MTLink:
+		content = "这是一条链接消息"
+	case MTLoc:
+		content = "这是一条位置消息"
+	case MTVoice:
+		content = "这是一条语音消息"
+	case MTVideo:
+		content = "这是一条视频消息"
 	default:
-		break
+		content = "这是一条未知消息"
 	}
-	return nil
+	txtMsg := TextMessage{
+		Message: msg,
+		Content: content,
+	}
+	return txtMsg
 }
 
 func GetResponseMessage(response interface{}) []byte {

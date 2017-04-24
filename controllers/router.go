@@ -46,7 +46,7 @@ func (this *RouterController) Post() {
 				MsgType:    model.MTText,
 				CreateTime: msg.CreateTime + 1,
 			},
-			Content: msg.Content + "heheda",
+			Content: msg.Content,
 		}
 		response := model.GetResponseMessage(rMsg)
 		w.Write(response)

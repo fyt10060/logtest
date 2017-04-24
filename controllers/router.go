@@ -44,7 +44,7 @@ func (this *RouterController) Post() {
 				ToUser:     msg.FromUser,
 				FromUser:   msg.ToUser,
 				MsgType:    model.MTText,
-				CreateTime: msg.CreateTime + 10,
+				CreateTime: msg.CreateTime + 1,
 			},
 			Content: msg.Content + "heheda",
 		}

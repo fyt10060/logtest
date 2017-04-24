@@ -22,12 +22,12 @@ type Message struct {
 	FromUser   string      `xml:"FromUserName"`
 	CreateTime int64       `xml:"CreateTime"`
 	MsgType    MessageType `xml:"MsgType"`
-	MsgId      string      `xml:"MsgId"`
+	MsgId      string      `xml:"-"`
 }
 
 type TextMessage struct {
 	Message
-	Content string   `xml:""`
+	Content string   `xml:"Content"`
 	XMLName xml.Name `xml:"xml"`
 }
 

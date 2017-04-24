@@ -27,11 +27,12 @@ type Message struct {
 
 type TextMessage struct {
 	Message
-	Content string `xml:""`
+	Content string   `xml:""`
+	XMLName xml.Name `xml:"xml"`
 }
 
 type result struct {
-	Data interface{} `xml:"xml"`
+	Data interface{}
 }
 
 func GetMessageDetail(data []byte) interface{} {
@@ -57,10 +58,10 @@ func GetMessageDetail(data []byte) interface{} {
 }
 
 func GetResponseMessage(response interface{}) []byte {
-	r := result{
-		Data: response,
-	}
-	rMsg, err := xml.Marshal(r)
+	//	r := result{
+	//		Data: response,
+	//	}
+	rMsg, err := xml.Marshal(response)
 	if err != nil {
 		return nil
 	}

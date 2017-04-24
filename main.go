@@ -12,38 +12,29 @@ import (
 	"io/ioutil"
 	"time"
 
+	"logtest/controllers"
+
 	"github.com/astaxie/beego"
 )
 
 const fileName string = "requestLog.txt"
 
-//type MyMux struct{}
-
-//func (p *MyMux) ServeHttp(w http.ResponseWriter, r *http.Request) {
-//	switch r.URL.Path {
-//	case "/log":
-//		fmt.Fprintf(w, getLog(w, r))
-//	default:
-//		saveRequestToLog(w, r)
-//		fmt.Fprintf(w, "{\"err_code\":0, \"data\": \"success\"")
-//	}
-//}
-
 type ApiVersion struct {
-	Host         string `json: host`
-	Version      string `json: version`
-	AddonHost    string `json: addon_host`
-	AddonVersion string `json: addon_version`
+	Host         string `json:"host"`
+	Version      string `json:"version"`
+	AddonHost    string `json:"addon_host"`
+	AddonVersion string `json:"addon_version"`
 }
 
 type ApiVersionSlice struct {
-	apis []ApiVersion `json: data`
+	Apis []ApiVersion `json:"data"`
 }
 
 func main() {
 	//	fmt.Println("Hello World!")
-	createFile()
-	beego.Router("/:func", &mainController{})
+	//	createFile()
+	beego.Router("/", &controllers.RouterController{})
+	//	beego.Router("/:func", &mainController{})
 	beego.Run()
 }
 
@@ -72,7 +63,7 @@ func (c *mainController) Get() {
 	case "push":
 		break
 	case "api_version":
-		go getApiAddress(w)
+		getApiAddress(w)
 	default:
 		httpNotFound(w, r)
 		go saveRequestToLog(w, r)
@@ -82,12 +73,14 @@ func (c *mainController) Get() {
 
 func getApiAddress(w http.ResponseWriter) {
 	var s ApiVersionSlice
-	s.apis = append(s.apis, ApiVersion{Host: "apidev.weixinhost.com", Version: "/4/", AddonHost: "api.weixinhost.com", AddonVersion: "/3/"})
+	s.Apis = append(s.Apis, ApiVersion{Host: "apidev.weixinhost.com", Version: "/4/", AddonHost: "api.weixinhost.com", AddonVersion: "/3/"})
 	b, err := json.Marshal(s)
 	if err != nil {
+		fmt.Println("no json")
 		return
 	}
-	fmt.Fprintln(w, string(b))
+	fmt.Println(string(b))
+	fmt.Fprintf(w, string(b))
 }
 
 func getLog(w http.ResponseWriter, r *http.Request) {

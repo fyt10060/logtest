@@ -71,13 +71,13 @@ func sendWebAuArticle(msg *model.Message) []byte {
 		Articles: []model.NewsDetail{model.NewsDetail{
 			Title:       "呵呵哒网页授权",
 			Description: "来网页授权吧！",
-			Url:         "burnlog.top/authorize",
+			Url:         "http://burnlog.top/authorize",
 			PicUrl:      "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1493115122072&di=629d6b612411e14b6fe1b232d7b3da76&imgtype=0&src=http%3A%2F%2Fwww.toycraft.cn%2Fwp-content%2Fuploads%2F2012%2F10%2Fweixin-member-identification-360-200.jpg",
 		},
 			model.NewsDetail{
 				Title:       "这是二号图文",
 				Description: "来网页授权吧！",
-				Url:         "burnlog.top/authorize",
+				Url:         "http://burnlog.top/authorize",
 				PicUrl:      "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1493115122072&di=629d6b612411e14b6fe1b232d7b3da76&imgtype=0&src=http%3A%2F%2Fwww.toycraft.cn%2Fwp-content%2Fuploads%2F2012%2F10%2Fweixin-member-identification-360-200.jpg",
 			},
 		},
@@ -88,6 +88,7 @@ func sendWebAuArticle(msg *model.Message) []byte {
 		ArticleCount: 2,
 		Articles:     list,
 	}
+	news.MsgType = model.MTNews
 	return model.GetResponseMessage(news)
 }
 

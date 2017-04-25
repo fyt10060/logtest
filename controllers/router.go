@@ -67,6 +67,8 @@ func (this *RouterController) Post() {
 
 func sendWebAuArticle(msg *model.Message) []byte {
 
+	msg.ReverseUserInMessage(model.MTNews)
+
 	var list = model.ArticleList{
 		Articles: []model.NewsDetail{model.NewsDetail{
 			Title:       "呵呵哒网页授权",

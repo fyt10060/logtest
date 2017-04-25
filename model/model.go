@@ -27,6 +27,14 @@ type Message struct {
 	MsgId      string      `xml:"MsgId"`
 }
 
+func (msg *Message) ReverseUserInMessage(newType MessageType) {
+	tmp := msg.ToUser
+	msg.ToUser = msg.FromUser
+	msg.FromUser = tmp
+	msg.MsgId = ""
+	msg.MsgType = newType
+}
+
 type TextMessage struct {
 	Message
 	XMLName xml.Name `xml:"xml"`

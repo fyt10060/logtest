@@ -41,24 +41,7 @@ func (this *RouterController) Post() {
 	case model.TextMessage:
 		msg, _ := result.(model.TextMessage)
 		var content string
-		content = msg.Content
-		if msg.Content == "做算术" || msg.Content == "做算数" || msg.Content == "算术" || msg.Content == "算数" {
-			content, _ = doOperation(msg.Content)
-			service.SetDoingOperation(true)
-		} else if msg.Content == "结束" || msg.Content == "=" {
-			if service.CheckDoingOperation() {
-				content, _ = doOperation(msg.Content)
-				service.SetDoingOperation(false)
-			}
-		} else {
-			if service.CheckDoingOperation() {
-				contents, isOver := doOperation(msg.Content)
-				content = contents
-				if isOver {
-					service.SetDoingOperation(false)
-				}
-			}
-		}
+		content = doOperation(msg.Content)
 		rMsg := model.TextMessage{
 			Message: model.Message{
 				ToUser:     msg.FromUser,
@@ -77,29 +60,36 @@ func (this *RouterController) Post() {
 
 }
 
-func doOperation(content string) (respContent string, isOver bool) {
+func doOperation(content string) (respContent string) {
 	switch content {
 	case "算术", "算数", "做算术", "做算数":
-		return "开始计算，请输入第一个数字", false
+		service.SetDoingOperation(true)
+		return "开始计算，请输入第一个数字"
 	case "结束", "=":
-
-		return "已结束，你的结果是：呵呵哒", true
+		service.SetDoingOperation(false)
+		service.SetShouldBeNumber(true)
+		return "已结束，你的结果是：呵呵哒"
 	default:
-		if service.CheckShouldBeNum() {
-			num, err := strconv.ParseFloat(content, 10)
-			if err != nil {
-				fmt.Println(num)
-				return "请输入数字", false
-			}
-			service.SetShouldBeNumber(false)
-			return "请输入符号", false
-		} else {
-			if content == "+" || content == "-" || content == "*" || content == "/" {
-				service.SetShouldBeNumber(true)
-				return "请输入数字", false
+		if service.CheckDoingOperation() {
+			if service.CheckShouldBeNum() {
+				num, err := strconv.ParseFloat(content, 10)
+				if err != nil {
+					fmt.Println(num)
+					return "请输入数字"
+				}
+				service.SetShouldBeNumber(false)
+				return "请输入符号"
 			} else {
-				return "请输入一个符号，目前仅支持'+''-''*''/'", false
+				if content == "+" || content == "-" || content == "*" || content == "/" {
+					service.SetShouldBeNumber(true)
+					return "请输入数字"
+				} else {
+					return "请输入一个符号，目前仅支持'+''-''*''/'"
+				}
 			}
+		} else {
+			return content
 		}
+
 	}
 }

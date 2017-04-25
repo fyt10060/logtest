@@ -35,7 +35,8 @@ func InitRedis(address string) redis.Conn {
 		redisPool = make(chan redis.Conn, MaxPoolSize)
 		go func() {
 			for i := 0; i < MaxPoolSize/2; i++ {
-				c, err := redis.Dial("tcp", address)
+				c, err := redis.Dial("tcp", address, redis.DialPassword("123456redis"))
+
 				if err != nil {
 					panic(err)
 				}

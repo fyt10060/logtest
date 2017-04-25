@@ -42,6 +42,11 @@ func (this *RouterController) Post() {
 		msg, _ := result.(model.TextMessage)
 		var content string
 		content = doOperation(msg.Content)
+		if content == "网页授权" {
+			result := sendWebAuArticle(&msg.Message)
+			w.Write(result)
+			return
+		}
 		rMsg := model.TextMessage{
 			Message: model.Message{
 				ToUser:     msg.FromUser,
@@ -58,6 +63,31 @@ func (this *RouterController) Post() {
 		w.Write(response)
 	}
 
+}
+
+func sendWebAuArticle(msg *model.Message) []byte {
+
+	var list = model.ArticleList{
+		Articles: []model.NewsDetail{model.NewsDetail{
+			Title:       "呵呵哒网页授权",
+			Description: "来网页授权吧！",
+			Url:         "burnlog.top/authorize",
+			PicUrl:      "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1493115122072&di=629d6b612411e14b6fe1b232d7b3da76&imgtype=0&src=http%3A%2F%2Fwww.toycraft.cn%2Fwp-content%2Fuploads%2F2012%2F10%2Fweixin-member-identification-360-200.jpg",
+		},
+			model.NewsDetail{
+				Title:       "呵呵哒网页授权",
+				Description: "来网页授权吧！",
+				Url:         "burnlog.top/authorize",
+			},
+		},
+	}
+
+	var news = model.NewsMessage{
+		Message:      *msg,
+		ArticleCount: 1,
+		Articles:     list,
+	}
+	return model.GetResponseMessage(news)
 }
 
 func doOperation(content string) (respContent string) {

@@ -15,6 +15,8 @@ const (
 	MTLoc               = "location"
 	MTLink              = "link"
 	MTNull              = "null"
+	MTNews              = "news"
+	MTEvent             = "event"
 )
 
 type Message struct {
@@ -27,8 +29,28 @@ type Message struct {
 
 type TextMessage struct {
 	Message
-	Content string   `xml:""`
 	XMLName xml.Name `xml:"xml"`
+	Content string   `xml:""`
+}
+
+type NewsMessage struct {
+	Message
+	XMLName      xml.Name `xml:"xml"`
+	ArticleCount int
+	Articles     ArticleList
+}
+
+type ArticleList struct {
+	Articles []NewsDetail
+	XMLName  xml.Name `xml:"Articles"`
+}
+
+type NewsDetail struct {
+	XMLName     xml.Name `xml:"item"`
+	Title       string
+	Description string
+	PicUrl      string
+	Url         string
 }
 
 type result struct {
@@ -62,6 +84,8 @@ func GetMessageDetail(data []byte) interface{} {
 		content = "这是一条语音消息"
 	case MTVideo:
 		content = "这是一条视频消息"
+	case MTEvent:
+		content = "这是一条事件消息"
 	default:
 		content = "这是一条未知消息"
 	}

@@ -10,6 +10,7 @@ import (
 const (
 	keyIsDoingOperation = "isDoingOpertaion"
 	keyShouldBeNum      = "shouldBeNum"
+	keyElementList      = "elementlist"
 )
 
 var (
@@ -68,6 +69,12 @@ func getBoolResult(withKey string, nilValue bool) bool {
 	} else {
 		return is
 	}
+}
+
+func AddToElementList(value string) {
+	conn := getRedisConn()
+	defer putRedis(conn)
+	conn.Do("lpush", keyElementList, value)
 }
 
 func setToRedisWithKey(key string, value interface{}) {

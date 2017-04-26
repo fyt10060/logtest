@@ -77,6 +77,29 @@ func AddToElementList(value string) {
 	conn.Do("lpush", keyElementList, value)
 }
 
+func GetAllNumberInList() []string {
+	conn := getRedisConn()
+	defer putRedis(conn)
+	lens, err := redis.Int(conn.Do("llen", keyElementList))
+	if err != nil {
+		return nil
+	}
+	var list []string
+	for i := 0; i < lens; i++ {
+		value, _ := redis.String(conn.Do("lpop", keyElementList))
+		list = append(list, value)
+	}
+
+	return reverse(list)
+}
+
+func reverse(s []string) []string {
+	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
+		s[i], s[j] = s[j], s[i]
+	}
+	return s
+}
+
 func setToRedisWithKey(key string, value interface{}) {
 	conn := getRedisConn()
 	defer putRedis(conn)

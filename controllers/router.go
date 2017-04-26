@@ -102,7 +102,8 @@ func doOperation(content string) (respContent string) {
 	case "结束", "=":
 		service.SetDoingOperation(false)
 		service.SetShouldBeNumber(true)
-		return "已结束，你的结果是：呵呵哒"
+		result := makeCalculation(service.GetAllNumberInList())
+		return fmt.Sprintf("已结束，你的结果是：%s", result)
 	default:
 		if service.CheckDoingOperation() {
 			if service.CheckShouldBeNum() {
@@ -111,11 +112,13 @@ func doOperation(content string) (respContent string) {
 					fmt.Println(num)
 					return "请输入数字"
 				}
+				service.AddToElementList(content)
 				service.SetShouldBeNumber(false)
 				return "请输入符号"
 			} else {
 				if content == "+" || content == "-" || content == "*" || content == "/" {
 					service.SetShouldBeNumber(true)
+					service.AddToElementList(content)
 					return "请输入数字"
 				} else {
 					return "请输入一个符号，目前仅支持'+''-''*''/'"
@@ -126,4 +129,37 @@ func doOperation(content string) (respContent string) {
 		}
 
 	}
+}
+
+func makeCalculation(data []string) string {
+	if data == nil {
+		return "错误"
+	}
+	var oper string
+	var result float64
+	for k, v := range data {
+		fmt.Println(result)
+		if k%2 == 0 {
+			num, _ := strconv.ParseFloat(v, 10)
+			if oper == "" {
+				result = num
+			} else {
+				switch oper {
+				case "+":
+					result = result + num
+				case "-":
+					result = result - num
+				case "*":
+					result = result * num
+				case "/":
+					result = result / num
+				default:
+					continue
+				}
+			}
+		} else {
+			oper = v
+		}
+	}
+	return fmt.Sprintf("%f", result)
 }

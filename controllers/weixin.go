@@ -3,7 +3,7 @@ package controllers
 
 import (
 	"fmt"
-	"io/ioutil"
+
 	"log"
 
 	"logtest/model"
@@ -28,6 +28,7 @@ func (c *YarClass) Echo() string {
 }
 
 func (c *Weixin) Weixin(accountParam, messageParam, otherParam map[string]interface{}) map[string]interface{} {
+	fmt.Println("123\n")
 
 	var reply = model.WeixinReply{}
 	reply.Action = "reply"
@@ -73,10 +74,8 @@ func (c *Weixin) Weixin(accountParam, messageParam, otherParam map[string]interf
 
 func (this *WeixinController) Post() {
 	c := this.Ctx
-	r := c.Request
+	//	r := c.Request
 	w := c.ResponseWriter
-
-	body, _ := ioutil.ReadAll(r.Body)
 
 	//	s := server.NewServer(&YarClass{})
 
@@ -90,7 +89,7 @@ func (this *WeixinController) Post() {
 	s1.Opt.LogLevel = yar.LogLevelDebug | yar.LoglevelNormal | yar.LogLevelError
 	s1.Register("weixin", "Weixin")
 
-	_ = s1.Handle(body, w)
+	_ = s1.Handle(this.Ctx.Input.RequestBody, w)
 
-	w.Write([]byte("11313"))
+	//	w.Write([]byte("11313"))
 }

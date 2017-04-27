@@ -33,12 +33,18 @@ func (c *Weixin) Weixin(accountParam, messageParam, otherParam map[string]interf
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(err)
+	fmt.Printf("appid: %s, account name: %s", account.Appid, account.Name)
 
 	var message model.WeiXinMessageInfo
 	err = mapstructure.Decode(messageParam, &message)
 	if err != nil {
 		fmt.Println(err)
+	}
+	fmt.Printf("message type: %s, message content:%s", message.MsgType, message.Content)
+
+	var result string = "not null"
+	if message.Content == "a2" {
+		result = "a2 + 付雨桐"
 	}
 
 	var other model.HostWxOther
@@ -47,7 +53,7 @@ func (c *Weixin) Weixin(accountParam, messageParam, otherParam map[string]interf
 		fmt.Println(err)
 	}
 
-	return "a2"
+	return result
 }
 
 func (this *WeixinController) Post() {
@@ -57,13 +63,13 @@ func (this *WeixinController) Post() {
 
 	body, _ := ioutil.ReadAll(r.Body)
 
-	s := server.NewServer(&YarClass{})
+	//	s := server.NewServer(&YarClass{})
 
-	s.Opt.LogLevel = yar.LogLevelDebug | yar.LoglevelNormal | yar.LogLevelError
+	//	s.Opt.LogLevel = yar.LogLevelDebug | yar.LoglevelNormal | yar.LogLevelError
 
-	s.Register("echo", "Echo")
+	//	s.Register("echo", "Echo")
 
-	_ = s.Handle(body, w)
+	//	_ = s.Handle(body, w)
 
 	s1 := server.NewServer(&Weixin{})
 	s1.Opt.LogLevel = yar.LogLevelDebug | yar.LoglevelNormal | yar.LogLevelError

@@ -4,7 +4,6 @@ package main
 import (
 	"fmt"
 	//	"html/template"
-	//	"log"
 	"net/http"
 	"os"
 	//	"strings"
@@ -15,6 +14,7 @@ import (
 	"logtest/controllers"
 
 	"github.com/astaxie/beego"
+	//	"github.com/weixinhost/yar.go"
 )
 
 const fileName string = "requestLog.txt"
@@ -34,6 +34,7 @@ func main() {
 	//	fmt.Println("Hello World!")
 	//	createFile()
 	beego.Router("/", &controllers.RouterController{})
+	beego.Router("/weixin", &controllers.WeixinController{})
 	//	beego.Router("/:func", &mainController{})
 	beego.Run()
 }

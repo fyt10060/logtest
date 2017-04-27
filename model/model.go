@@ -65,6 +65,10 @@ type result struct {
 	Data interface{}
 }
 
+//func ParseUrl() string {
+
+//}
+
 func GetMessageDetail(data []byte) interface{} {
 	var msg Message
 	err := xml.Unmarshal(data, &msg)

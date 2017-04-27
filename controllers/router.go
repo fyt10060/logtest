@@ -12,6 +12,10 @@ import (
 	"github.com/astaxie/beego"
 )
 
+const (
+	authorizeUrl = "http://open.weixin.qq.com/connect/oauth2/authorize?appid=wx58aa8ab881c09fc1&redirect_uri=http://burnlog.top/authorize&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect"
+)
+
 type RouterController struct {
 	beego.Controller
 }
@@ -73,7 +77,7 @@ func sendWebAuArticle(msg *model.Message) []byte {
 		Articles: []model.NewsDetail{model.NewsDetail{
 			Title:       "呵呵哒网页授权",
 			Description: "来网页授权吧！",
-			Url:         "http://burnlog.top/authorize",
+			Url:         authorizeUrl,
 			PicUrl:      "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1493115122072&di=629d6b612411e14b6fe1b232d7b3da76&imgtype=0&src=http%3A%2F%2Fwww.toycraft.cn%2Fwp-content%2Fuploads%2F2012%2F10%2Fweixin-member-identification-360-200.jpg",
 		},
 			model.NewsDetail{
@@ -138,7 +142,6 @@ func makeCalculation(data []string) string {
 	var oper string
 	var result float64
 	for k, v := range data {
-		fmt.Println(result)
 		if k%2 == 0 {
 			num, _ := strconv.ParseFloat(v, 10)
 			if oper == "" {

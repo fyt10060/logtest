@@ -64,6 +64,7 @@ func (c *Weixin) Weixin(accountParam, messageParam, otherParam map[string]interf
 			nMap = make(map[string]interface{})
 			nMap["message"] = model.GetReplyWithSendMsg(message, "a2 + 付雨桐")
 			nMap["type"] = "raw"
+			reply.Data = nMap
 		}
 	}
 

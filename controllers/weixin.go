@@ -92,7 +92,10 @@ func (this *WeixinController) Post() {
 	s1.Opt.LogLevel = yar.LogLevelDebug | yar.LoglevelNormal | yar.LogLevelError
 	s1.Register("weixin", "Weixin")
 
-	_ = s1.Handle(body, w)
+	err := s1.Handle(body, w)
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	//	w.Write([]byte("11313"))
 }

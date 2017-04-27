@@ -79,19 +79,13 @@ func (this *WeixinController) Post() {
 	w := c.ResponseWriter
 
 	body, err := ioutil.ReadAll(r.Body)
+	fmt.Printf("request medthod:%s\n", r.Method)
+	fmt.Printf("request url: %s\n", r.URL.String())
 
 	if err != nil {
-		fmt.Printf("body err:%s", err)
+		fmt.Printf("body err:%s\n", err)
 	}
-	fmt.Printf("body:%x", body)
-
-	//	s := server.NewServer(&YarClass{})
-
-	//	s.Opt.LogLevel = yar.LogLevelDebug | yar.LoglevelNormal | yar.LogLevelError
-
-	//	s.Register("echo", "Echo")
-
-	//	_ = s.Handle(body, w)
+	fmt.Printf("body:%x\n", body)
 
 	s1 := server.NewServer(&Weixin{})
 	s1.Opt.LogLevel = yar.LogLevelDebug | yar.LoglevelNormal | yar.LogLevelError
@@ -99,7 +93,7 @@ func (this *WeixinController) Post() {
 
 	err1 := s1.Handle(body, w)
 	if err1 != nil {
-		fmt.Println(err1)
+		fmt.Printf("handle err:%s\n", err1)
 	}
 
 	//	w.Write([]byte("11313"))

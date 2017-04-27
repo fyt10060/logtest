@@ -27,11 +27,17 @@ func (c *YarClass) Echo() string {
 	return "echo teshdfa"
 }
 
-func (c *Weixin) Weixin(accountParam, messageParam, otherParam map[string]interface{}) string {
+func (c *Weixin) Weixin(accountParam, messageParam, otherParam map[string]interface{}) map[string]interface{} {
+
+	var reply = model.WeixinReply{}
+	reply.Action = "reply"
+	reply.Exit = false
+	reply.Log = false
 	var account model.Account
 	err := mapstructure.Decode(accountParam, &account)
 	if err != nil {
 		fmt.Println(err)
+		return model.Struct2Map(reply)
 	}
 	fmt.Printf("appid: %s, account name: %s", account.Appid, account.Name)
 
@@ -39,21 +45,29 @@ func (c *Weixin) Weixin(accountParam, messageParam, otherParam map[string]interf
 	err = mapstructure.Decode(messageParam, &message)
 	if err != nil {
 		fmt.Println(err)
+		return model.Struct2Map(reply)
 	}
 	fmt.Printf("message type: %s, message content:%s", message.MsgType, message.Content)
-
-	var result string = "not null"
-	if message.Content == "a2" {
-		result = "a2 + 付雨桐"
-	}
 
 	var other model.HostWxOther
 	err = mapstructure.Decode(otherParam, &other)
 	if err != nil {
 		fmt.Println(err)
+		return model.Struct2Map(reply)
 	}
 
-	return result
+	if message.MsgType == "text" {
+		if message.Content == "a2" {
+			reply.Exit = true
+			reply.Log = true
+			var nMap map[string]interface{}
+			nMap = make(map[string]interface{})
+			nMap["message"] = model.GetReplyWithSendMsg(message, "a2 + 付雨桐")
+			nMap["type"] = "raw"
+		}
+	}
+
+	return model.Struct2Map(reply)
 }
 
 func (this *WeixinController) Post() {

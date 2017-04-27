@@ -3,6 +3,7 @@ package model
 //	"fmt"
 import (
 	"encoding/xml"
+	"fmt"
 )
 
 type MessageType string
@@ -116,5 +117,8 @@ func GetResponseMessage(response interface{}) []byte {
 	if err != nil {
 		return nil
 	}
+	fmt.Println(string(rMsg))
+	fmt.Println("\nb\n")
+	fmt.Printf("%x", rMsg)
 	return rMsg
 }

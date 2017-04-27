@@ -2,11 +2,60 @@
 package model
 
 import (
-	"fmt"
+	//	"fmt"
+	"encoding/xml"
+	"reflect"
 )
 
-func main() {
-	fmt.Println("Hello World!")
+func Struct2Map(obj interface{}) map[string]interface{} {
+	t := reflect.TypeOf(obj)
+	v := reflect.ValueOf(obj)
+
+	var data = make(map[string]interface{})
+	for i := 0; i < t.NumField(); i++ {
+		data[t.Field(i).Name] = v.Field(i).Interface()
+	}
+	return data
+
+}
+
+func GetReplyWithSendMsg(oMsg WeiXinMessageInfo, content string) (xmlString string) {
+	reply := BaseReply{
+		FromUserName: CDATAText{oMsg.ToUserName},
+		ToUserName:   CDATAText{oMsg.FromUserName},
+		MsgType:      CDATAText{oMsg.MsgType},
+		CreateTime:   CDATAText{string(oMsg.CreateTime)},
+	}
+	text := Text{
+		BaseReply: reply,
+		Content:   CDATAText{content},
+	}
+	result, _ := xml.Marshal(text)
+	return string(result)
+}
+
+type WeixinReply struct {
+	Action string                 `json:"action"`
+	Data   map[string]interface{} `json:"data"`
+	Exit   bool                   `json:"exit"`
+	Log    bool                   `json:"log"`
+}
+
+type Text struct {
+	XMLName xml.Name `xml:"xml"`
+	BaseReply
+	Content CDATAText
+}
+
+type BaseReply struct {
+	FromUserName CDATAText
+	ToUserName   CDATAText
+	MsgType      CDATAText
+	CreateTime   CDATAText
+}
+
+type CDATAText struct {
+	Text string `xml:",innerxml"`
 }
 
 type Account struct {

@@ -83,7 +83,7 @@ func (this *WeixinController) Post() {
 	if err != nil {
 		fmt.Printf("body err:%s", err)
 	}
-	fmt.Println(body)
+	fmt.Printf("body:%x", body)
 
 	//	s := server.NewServer(&YarClass{})
 

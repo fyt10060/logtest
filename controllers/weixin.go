@@ -78,7 +78,12 @@ func (this *WeixinController) Post() {
 	r := c.Request
 	w := c.ResponseWriter
 
-	body, _ := ioutil.ReadAll(r.Body)
+	body, err := ioutil.ReadAll(r.Body)
+
+	if err != nil {
+		fmt.Printf("body err:%s", err)
+	}
+	fmt.Println(body)
 
 	//	s := server.NewServer(&YarClass{})
 
@@ -92,9 +97,9 @@ func (this *WeixinController) Post() {
 	s1.Opt.LogLevel = yar.LogLevelDebug | yar.LoglevelNormal | yar.LogLevelError
 	s1.Register("weixin", "Weixin")
 
-	err := s1.Handle(body, w)
-	if err != nil {
-		fmt.Println(err)
+	err1 := s1.Handle(body, w)
+	if err1 != nil {
+		fmt.Println(err1)
 	}
 
 	//	w.Write([]byte("11313"))

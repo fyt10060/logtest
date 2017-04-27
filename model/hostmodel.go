@@ -5,6 +5,7 @@ import (
 	//	"fmt"
 	"encoding/xml"
 	"reflect"
+	"strconv"
 )
 
 func Struct2Map(obj interface{}) map[string]interface{} {
@@ -20,12 +21,14 @@ func Struct2Map(obj interface{}) map[string]interface{} {
 }
 
 func GetReplyWithSendMsg(oMsg WeiXinMessageInfo, content string) (xmlString string) {
+	time := strconv.FormatInt(oMsg.CreateTime, 10)
 	reply := BaseReply{
 		FromUserName: CDATAText{oMsg.ToUserName},
 		ToUserName:   CDATAText{oMsg.FromUserName},
 		MsgType:      CDATAText{oMsg.MsgType},
-		CreateTime:   CDATAText{string(oMsg.CreateTime)},
+		CreateTime:   CDATAText{time},
 	}
+
 	text := Text{
 		BaseReply: reply,
 		Content:   CDATAText{content},

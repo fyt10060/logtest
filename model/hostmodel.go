@@ -5,7 +5,7 @@ import (
 	//	"fmt"
 	"encoding/xml"
 	"reflect"
-	"strconv"
+	//	"strconv"
 )
 
 func Struct2Map(obj interface{}) map[string]interface{} {
@@ -27,7 +27,8 @@ func GetReplyWithSendMsg(oMsg WeiXinMessageInfo, content string) (xmlString stri
 	//	} else {
 	//		time = strconv.FormatInt(oMsg.CreateTime, 10)
 	//	}
-	time := strconv.FormatInt(oMsg.CreateTime, 10)
+	//	time := strconv.FormatInt(oMsg.CreateTime, 10)
+	time := oMsg.CreateTime
 	reply := BaseReply{
 		FromUserName: CDATAText{oMsg.ToUserName},
 		ToUserName:   CDATAText{oMsg.FromUserName},
@@ -105,7 +106,7 @@ type AccountComponent struct {
 type WeiXinMessageInfo struct {
 	FromUserName     string  `json:"FromUserName"`
 	ToUserName       string  `json:"ToUserName"`
-	CreateTime       int64   `json:"CreateTime,string"`
+	CreateTime       string  `json:"CreateTime"`
 	MsgType          string  `json:"MsgType"`
 	MsgID            string  `json:"MsgId"`
 	Event            string  `json:"Event,omitempty"`

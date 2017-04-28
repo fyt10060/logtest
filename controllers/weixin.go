@@ -91,7 +91,7 @@ func (this *WeixinController) Post() {
 	s1.Opt.LogLevel = yar.LogLevelDebug | yar.LoglevelNormal | yar.LogLevelError
 	s1.Register("weixin", "Weixin")
 
-	err1 := s1.Handle(body, w)
+	err1 := s1.Handle(c.Input.RequestBody, w)
 	if err1 != nil {
 		fmt.Printf("handle err:%s\n", err1)
 	}
